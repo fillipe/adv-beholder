@@ -1,0 +1,41 @@
+service: adv-beholder
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  versionFunctions: false
+  region: ${opt:region, 'us-east-2'}
+  stage: ${opt:stage, 'dev'}
+  memorySize: 128
+  stackTags:
+    smartbank:cost-center:level0: serverless
+    smartbank:cost-center:level1: backend
+    smartbank:cost-center:level2: adv-beholder
+  logRetentionInDays: ${env:LOG_RETENTION}
+
+custom:
+  projectPath: "adv-beholder"
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-plugin-resource-tagging
+  - serverless-mocha-plugin
+
+package:
+  individually: true
+  patterns:
+    - '!response/**'
+    - '!node_modules/**'
+    - '!bitbucket-pipelines.yml'
+    - '!package-lock.json'
+    - '!README.md'
+    - '!package.json'
+    - '!config/**'
+    - '!src/**'
+    - '!swagger/**'
+
+functions:
+  - ${file(src/functions/GetTeste/config.yml)}
+  - ${file(swagger/docs.yml)}

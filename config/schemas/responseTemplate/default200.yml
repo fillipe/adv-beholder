@@ -1,0 +1,23 @@
+statusCodes:
+  200:
+    pattern: ''
+  403: 
+    headers:
+      Content-Type: "'application/json'"
+    pattern: '.*"status":403.*'
+    template: $input.path('$.errorMessage')
+  404: 
+    headers:
+      Content-Type: "'application/json'"
+    pattern: '.*"status":404.*'
+    template: $input.path('$.errorMessage')
+  409: 
+    headers:
+      Content-Type: "'application/json'"
+    pattern: '.*"status":409.*'
+    template: $input.path('$.errorMessage')
+  500: 
+    headers:
+      Content-Type: "'application/json'"
+    pattern: '.*"status":500.*'
+    template: $input.path('$.errorMessage')

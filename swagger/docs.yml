@@ -1,0 +1,29 @@
+Swagger:
+  handler: swagger/swagger.handle
+  events:
+    - http:
+        path: /${self:custom.projectPath}/docs
+        method: get
+        cors: true
+        integration: mock
+        request:
+          template:
+            application/json: '{"statusCode": 301}'
+        response:
+          template: redirect
+          headers:
+            Location: "'/${opt:env}/${self:custom.projectPath}/docs/index.html'"
+          statusCodes:
+            301:
+              pattern: ''
+    - http: 
+        path: /${self:custom.projectPath}/docs/{proxy+}
+        method: any
+        cors: true
+  optimize: false
+  package:
+    patterns:
+      - 'swagger/swagger.js'
+      - 'swagger/swagger.yml'
+      - 'node_modules/swagger-ui-dist/**'
+      - 'node_modules/aws-serverless-swagger-ui/**'

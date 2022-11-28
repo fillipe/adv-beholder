@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  description: API para controle de agenda de advogado autônomo
+  version: 1.0.0
+  title: ADV Beholder API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: TESTE
+    description: Teste
+
+servers:
+- url: https://d2j4mx5809.execute-api.us-east-2.amazonaws.com/dev/adv-beholder
+
+paths:
+  /teste:
+    get:
+      tags:
+        - TESTE
+      summary: Busca de teste
+      responses:
+        "200":
+          description: Busca realizada com sucesso
+
+components:
+  schemas:
+          
+    ResponseError:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: identificador único da requisição (não é o mesmo identificador de qualquer entidade de negócio).
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+          
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          description: o código HTTP de retorno da requisição em formato string. É explicitado no corpo para evitar possíveis mudanças do codigo de erro do protocolo HTTP devido a possíveis proxies que façam isso.
+        code:
+          type: string
+          description: um codigo de erro de negócio como string, caracteres maiúsculos em padrão SNAKE_CASE.
+        title:
+          type: string
+          description: uma pequena descrição sumarizada para seres humanos lerem.
+        detail:
+          type: string
+          description: uma descrição detalhada do problema.
