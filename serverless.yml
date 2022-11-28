@@ -10,9 +10,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   memorySize: 128
   stackTags:
-    smartbank:cost-center:level0: serverless
-    smartbank:cost-center:level1: backend
-    smartbank:cost-center:level2: adv-beholder
+    level0: serverless
+    level1: backend
+    level2: adv-beholder
   logRetentionInDays: ${env:LOG_RETENTION}
 
 custom:
