@@ -7,24 +7,370 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-  - name: TESTE
-    description: Teste
+  - name: Contratos
+    description: API de contratos
+  - name: Pagamentos
+    description: API de pagamentos
 
 servers:
-- url: https://d2j4mx5809.execute-api.us-east-2.amazonaws.com/dev/adv-beholder
+    -
+        url: 'https://{gateway}.execute-api.{region}.amazonaws.com/{stage}/adv-beholder'
+        description: Servidor para acesso a API
+        variables:
+            account:
+                default: MUDAR
+                description: ID do gateway
+            region:
+                default: us-east-2
+                description: Região da conta
+            stage:
+                default: dev
+                description: Ambiente
 
 paths:
-  /teste:
-    get:
+  /contratos:
+    post:
       tags:
-        - TESTE
-      summary: Busca de teste
+        - Contratos
+      summary: Cria um contrato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContratosPostRequest"
+        description: Payload de criação de contrato
+      responses:
+        "201":
+          description: Contrato criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratosPostResponse"
+        "403":
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+        "409":
+          description: Conflito ao inserir recurso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+  /contratos/{idContrato}:
+    patch:
+      tags:
+        - Contratos
+      summary: Atualiza um contrato
+      parameters:
+        - name: idContrato
+          in: path
+          description: ID do contrato
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContratosPatchRequest"
+        description: Payload de atualização de contrato
       responses:
         "200":
-          description: Busca realizada com sucesso
+          description: Contrato atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratosPatchResponse"
+        "403":
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+        "409":
+          description: Conflito ao inserir recurso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+    delete:
+      tags:
+        - Contratos
+      summary: Cancela um contrato
+      parameters:
+        - name: idContrato
+          in: path
+          description: ID do contrato
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Contrato cancelado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratosDeleteResponse"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+  /contratos/{cpfCnpj}:
+    get:
+      tags:
+        - Contratos
+      summary: Busca contratos de um cliente
+      parameters:
+        - name: cpfCnpj
+          in: path
+          description: CPF ou CNPJ do cliente
+          required: true
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status do contrato
+          schema:
+            type: string
+            enum: [PENDENTE_CONFIRMACAO, ABERTO, ATRASADO, FECHADO, CANCELADO]
+      responses:
+        "200":
+          description: Busca de contrato realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContratosGetResponse"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+  /pagamentos:
+    get:
+      tags:
+        - Pagamentos
+      summary: Busca pagamentos por status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          description: Status dos pagamentos
+          schema:
+            type: string
+            enum: [PENDENTE, PAGO]
+      responses:
+        "200":
+          description: Busca de pagamentos realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagamentosGetResponse"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+  /pagamentos/{id}:
+    delete:
+      tags:
+        - Pagamentos
+      summary: Deleta um pagamento
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do pagamento
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Pagamento deletado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagamentosDeleteResponse"
+        "404":
+          description: Recurso referenciado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
 
 components:
   schemas:
+  
+    Contrato:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        linkDocumento:
+          type: string
+        cliente:
+          $ref: "#/components/schemas/Cliente"
+        processo:
+          $ref: "#/components/schemas/Processo"
+        pagamento:
+          $ref: "#/components/schemas/Pagamento"
+          
+    Cliente:
+      type: object
+      properties:
+        nome:
+          type: string
+        cpfCnpj:
+          type: string
+        endereco:
+          type: string
+        celular:
+          type: string
+          
+    Processo:
+      type: object
+      properties:
+        titulo:
+          type: string
+          
+    Pagamento:
+      type: object
+      properties:
+        id:
+          type: string
+        valorTotal:
+          type: string
+        valorParcela:
+          type: string
+        quantidadeParcelas:
+          type: integer
+        diaVencimento:
+          type: integer
+        dataDoCombinado:
+          type: string
+          format: date
+          
+    ContratosPostRequest:
+      type: object
+      properties:
+        cliente:
+          $ref: "#/components/schemas/Cliente"
+        processo:
+          $ref: "#/components/schemas/Processo"
+        pagamento:
+          $ref: "#/components/schemas/Pagamento"
+          
+    ContratosPostResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            idContrato:
+              type: string
+            linkDocumento:
+              type: string
+              
+    ContratosPatchRequest:
+      type: object
+      properties:
+        confirma:
+          type: boolean
+          
+    ContratosPatchResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            mensagem:
+              type: string
+              
+    ContratosDeleteResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            mensagem:
+              type: string
+              
+    ContratosGetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            contratos:
+              type: array
+              items:
+                $ref: "#/components/schemas/Contrato"
+                
+    PagamentosGetResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            pagamentos:
+              type: array
+              items:
+                type: object
+                properties:
+                  idPagamento:
+                    type: string
+                  idContrato:
+                    type: string
+                  cpfCnpj:
+                    type: string
+                  valorTotal:
+                    type: string
+                  valorParcela:
+                    type: string
+                  quantidadeParcelas:
+                    type: integer
+                  dataDoCombinado:
+                    type: string
+                    format: date
+    
+    PagamentosDeleteResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            mensagem:
+              type: string
           
     ResponseError:
       type: object
