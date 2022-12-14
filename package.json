@@ -18,6 +18,7 @@
   "dependencies": {
     "aws-serverless-swagger-ui": "^1.0.1",
     "serverless-iam-roles-per-function": "^3.2.0",
-    "serverless-plugin-resource-tagging": "^1.1.0"
+    "serverless-plugin-resource-tagging": "^1.1.0",
+    "uuid-by-string": "^4.0.0"
   }
 }

@@ -1,0 +1,13 @@
+GetContratos:
+  name: ${self:provider.stage}-${self:service}-GetContratos
+  handler: src/functions/GetContratos/handler.handle
+  package:
+    patterns:
+      - 'src/functions/GetContratos/handler.js'
+      - 'src/util/**'
+  events:
+    - http:
+        path: ${self:custom.projectPath}/contratos/cliente/{cpfCnpj}
+        method: get
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default200.yml)}

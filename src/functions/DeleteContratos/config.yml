@@ -1,0 +1,13 @@
+DeleteContratos:
+  name: ${self:provider.stage}-${self:service}-DeleteContratos
+  handler: src/functions/DeleteContratos/handler.handle
+  package:
+    patterns:
+      - 'src/functions/DeleteContratos/handler.js'
+      - 'src/util/**'
+  events:
+    - http:
+        path: ${self:custom.projectPath}/contratos/{idContrato}
+        method: delete
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default200.yml)}

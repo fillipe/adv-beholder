@@ -14,10 +14,10 @@ tags:
 
 servers:
     -
-        url: 'https://{gateway}.execute-api.{region}.amazonaws.com/{stage}/adv-beholder'
+        url: 'https://{gwid}.execute-api.{region}.amazonaws.com/{stage}/adv-beholder'
         description: Servidor para acesso a API
         variables:
-            account:
+            gwid:
                 default: MUDAR
                 description: ID do gateway
             region:
@@ -131,7 +131,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseError"
-  /contratos/{cpfCnpj}:
+  /contratos/cliente/{cpfCnpj}:
     get:
       tags:
         - Contratos
@@ -143,6 +143,13 @@ paths:
           required: true
           schema:
             type: string
+          examples:
+            cpfExample:
+              summary: CPF de exemplo
+              value: 95048722043
+            cnpjExample:
+              summary: CNPJ de exemplo
+              value: 77772101000105
         - name: status
           in: query
           description: Status do contrato
@@ -230,8 +237,10 @@ components:
           $ref: "#/components/schemas/Cliente"
         processo:
           $ref: "#/components/schemas/Processo"
-        pagamento:
-          $ref: "#/components/schemas/Pagamento"
+        pagamentos:
+          type: array
+          items:
+            $ref: "#/components/schemas/PagamentoProgramado"
           
     Cliente:
       type: object
@@ -263,6 +272,24 @@ components:
         quantidadeParcelas:
           type: integer
         diaVencimento:
+          type: integer
+        dataDoCombinado:
+          type: string
+          format: date
+          
+    PagamentoProgramado:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [PENDENTE, PAGO]
+        valorTotal:
+          type: string
+        valorParcela:
+          type: string
+        quantidadeParcelas:
           type: integer
         dataDoCombinado:
           type: string
@@ -349,6 +376,9 @@ components:
                     type: string
                   idContrato:
                     type: string
+                  status:
+                    type: string
+                    enum: [PENDENTE, PAGO]
                   cpfCnpj:
                     type: string
                   valorTotal:

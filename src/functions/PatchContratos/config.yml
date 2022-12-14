@@ -1,0 +1,13 @@
+PatchContratos:
+  name: ${self:provider.stage}-${self:service}-PatchContratos
+  handler: src/functions/PatchContratos/handler.handle
+  package:
+    patterns:
+      - 'src/functions/PatchContratos/handler.js'
+      - 'src/util/**'
+  events:
+    - http:
+        path: ${self:custom.projectPath}/contratos/{idContrato}
+        method: patch
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default200.yml)}

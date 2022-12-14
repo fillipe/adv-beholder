@@ -23,6 +23,7 @@ plugins:
   - serverless-plugin-resource-tagging
   - serverless-mocha-plugin
 
+
 package:
   individually: true
   patterns:
@@ -35,7 +36,11 @@ package:
     - '!config/**'
     - '!src/**'
     - '!swagger/**'
+    - '!docs/**'
 
 functions:
-  - ${file(src/functions/GetTeste/config.yml)}
+  - ${file(src/functions/DeleteContratos/config.yml)}
+  - ${file(src/functions/GetContratos/config.yml)}
+  - ${file(src/functions/PatchContratos/config.yml)}
+  - ${file(src/functions/PostContratos/config.yml)}
   - ${file(swagger/docs.yml)}

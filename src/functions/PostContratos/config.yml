@@ -1,0 +1,16 @@
+PostContratos:
+  name: ${self:provider.stage}-${self:service}-PostContratos
+  handler: src/functions/PostContratos/handler.handle
+  package:
+    patterns:
+      - 'src/functions/PostContratos/handler.js'
+      - 'src/util/**'
+      - 'node_modules/uuid-by-string/**'
+      - 'node_modules/js-md5/**'
+      - 'node_modules/js-sha1/**'
+  events:
+    - http:
+        path: ${self:custom.projectPath}/contratos
+        method: post
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default201.yml)}
