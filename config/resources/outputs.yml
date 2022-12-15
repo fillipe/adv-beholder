@@ -1,0 +1,9 @@
+Outputs:
+
+  # COGNITO
+  UserPoolId:
+    Value:
+      Ref: CognitoUserPool
+  UserPoolClientId:
+    Value:
+      Ref: CognitoUserPoolClient

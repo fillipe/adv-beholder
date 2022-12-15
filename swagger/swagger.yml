@@ -7,6 +7,8 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 tags:
+  - name: Usuários
+    description: API de usuarios
   - name: Contratos
     description: API de contratos
   - name: Pagamentos
@@ -28,6 +30,60 @@ servers:
                 description: Ambiente
 
 paths:
+
+  /usuarios/signup:
+    post:
+      tags:
+        - Usuários
+      summary: Cria usuário
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Signup"
+        description: Payload de criação de usuário
+      responses:
+        "201":
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignupPostResponse"
+        "401":
+          description: Requisição não autorizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+
+  /usuarios/login:
+    post:
+      tags:
+        - Usuários
+      summary: Obtem token de acesso para um usuário
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+        description: Payload de login de usuário
+      responses:
+        "201":
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginPostResponse"
+        "401":
+          description: Requisição não autorizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseError"
+      
+    
   /contratos:
     post:
       tags:
@@ -223,6 +279,24 @@ paths:
 
 components:
   schemas:
+    
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        code:
+          type: string
+    
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
   
     Contrato:
       type: object
@@ -294,6 +368,28 @@ components:
         dataDoCombinado:
           type: string
           format: date
+          
+    SignupPostResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            mensagem:
+              type: string
+          
+    LoginPostResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        data:
+          type: object
+          properties:
+            token:
+              type: string
           
     ContratosPostRequest:
       type: object
@@ -428,3 +524,14 @@ components:
         detail:
           type: string
           description: uma descrição detalhada do problema.
+          
+    
+  
+  securitySchemes:
+    ApiTokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+          
+security:
+  - ApiTokenAuth: []

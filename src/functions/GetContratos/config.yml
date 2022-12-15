@@ -10,4 +10,11 @@ GetContratos:
         path: ${self:custom.projectPath}/contratos/cliente/{cpfCnpj}
         method: get
         integration: lambda
+        authorizer:
+          name: ${self:provider.stage}-${self:service}-Authorizer
+          type: COGNITO_USER_POOLS
+          arn:
+            Fn::GetAtt:
+              - CognitoUserPool
+              - Arn
         response: ${file(config/schemas/responseTemplate/default200.yml)}

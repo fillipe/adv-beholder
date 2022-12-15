@@ -13,4 +13,11 @@ PostContratos:
         path: ${self:custom.projectPath}/contratos
         method: post
         integration: lambda
+        authorizer:
+          name: ${self:provider.stage}-${self:service}-Authorizer
+          type: COGNITO_USER_POOLS
+          arn:
+            Fn::GetAtt:
+              - CognitoUserPool
+              - Arn
         response: ${file(config/schemas/responseTemplate/default201.yml)}

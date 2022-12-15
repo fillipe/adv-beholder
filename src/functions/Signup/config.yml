@@ -1,0 +1,22 @@
+Signup:
+  name: ${self:provider.stage}-${self:service}-Signup
+  handler: src/functions/Signup/handler.handle
+  package:
+    patterns:
+      - 'src/functions/Signup/handler.js'
+      - 'src/util/**'
+  environment:
+    userPoolId: !Ref CognitoUserPool
+  events:
+    - http:
+        path: ${self:custom.projectPath}/usuarios/signup
+        method: post
+        cors: true
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default201.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - cognito-idp:AdminCreateUser
+        - cognito-idp:AdminSetUserPassword
+      Resource: !GetAtt CognitoUserPool.Arn

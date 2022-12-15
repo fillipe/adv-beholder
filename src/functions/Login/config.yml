@@ -1,0 +1,22 @@
+Login:
+  name: ${self:provider.stage}-${self:service}-Login
+  handler: src/functions/Login/handler.handle
+  package:
+    patterns:
+      - 'src/functions/Login/handler.js'
+      - 'src/util/**'
+  environment:
+    userPoolId: !Ref CognitoUserPool
+    userPoolClientId: !Ref CognitoUserPoolClient
+  events:
+    - http:
+        path: ${self:custom.projectPath}/usuarios/login
+        method: post
+        cors: true
+        integration: lambda
+        response: ${file(config/schemas/responseTemplate/default200.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - cognito-idp:AdminInitiateAuth
+      Resource: !GetAtt CognitoUserPool.Arn

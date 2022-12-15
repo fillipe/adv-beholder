@@ -39,8 +39,15 @@ package:
     - '!docs/**'
 
 functions:
+  - ${file(src/functions/Signup/config.yml)}
+  - ${file(src/functions/Login/config.yml)}
   - ${file(src/functions/DeleteContratos/config.yml)}
   - ${file(src/functions/GetContratos/config.yml)}
   - ${file(src/functions/PatchContratos/config.yml)}
   - ${file(src/functions/PostContratos/config.yml)}
   - ${file(swagger/docs.yml)}
+
+resources:
+  - ${file(config/resources/cognito.yml)}
+  - ${file(config/resources/outputs.yml)}
+

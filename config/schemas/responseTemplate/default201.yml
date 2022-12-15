@@ -6,6 +6,11 @@ statusCodes:
       Content-Type: "'application/json'"
     pattern: '.*"status":400.*'
     template: $input.path('$.errorMessage')
+  401: 
+    headers:
+      Content-Type: "'application/json'"
+    pattern: '.*"status":401.*'
+    template: $input.path('$.errorMessage')
   403: 
     headers:
       Content-Type: "'application/json'"
