@@ -5,9 +5,12 @@ PostContratos:
     patterns:
       - 'src/functions/PostContratos/handler.js'
       - 'src/util/**'
+      - 'src/errors/**'
       - 'node_modules/uuid-by-string/**'
       - 'node_modules/js-md5/**'
       - 'node_modules/js-sha1/**'
+  environment:
+    CONTRACT_TABLE: ${cf:adv-beholder-db-${opt:env}.ContratosTableName}
   events:
     - http:
         path: ${self:custom.projectPath}/contratos
@@ -21,3 +24,9 @@ PostContratos:
               - CognitoUserPool
               - Arn
         response: ${file(config/schemas/responseTemplate/default201.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"        
+      Action:
+        - dynamodb:PutItem
+      Resource: 
+        - ${cf:adv-beholder-db-${opt:env}.ContratosTableArn}

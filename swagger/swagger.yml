@@ -70,8 +70,8 @@ paths:
               $ref: "#/components/schemas/Login"
         description: Payload de login de usuário
       responses:
-        "201":
-          description: Usuário criado com sucesso
+        "200":
+          description: Token de Usuário obtido com sucesso
           content:
             application/json:
               schema:
@@ -337,12 +337,12 @@ components:
     Pagamento:
       type: object
       properties:
-        id:
-          type: string
         valorTotal:
-          type: string
+          type: number
+          format: double
         valorParcela:
-          type: string
+          type: number
+          format: double
         quantidadeParcelas:
           type: integer
         diaVencimento:

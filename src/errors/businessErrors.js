@@ -26,4 +26,18 @@ class LoginNotAuthorizedError extends Error {
 
 }
 
-module.exports = { SignupNotAuthorizedError, LoginNotAuthorizedError }
+
+class InsertContractError extends Error {
+
+    constructor(message) {
+        super(message)
+        this.name = this.constructor.name
+        this.status = 400
+        this.code = 'PERSIST_CONTRACT'
+        this.title = 'Erro ao persistir dados de contrato'
+        this.detail = 'Algum erro ocorreu ao persistir os dados de contrato'
+    }
+
+}
+
+module.exports = { SignupNotAuthorizedError, LoginNotAuthorizedError, InsertContractError }
