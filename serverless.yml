@@ -14,6 +14,8 @@ provider:
     level1: backend
     level2: adv-beholder
   logRetentionInDays: ${env:LOG_RETENTION}
+  environment:
+    CONTRACT_TABLE: ${cf:adv-beholder-db-${opt:env}.ContratosTableName}
 
 custom:
   projectPath: "adv-beholder"

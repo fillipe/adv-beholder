@@ -5,9 +5,10 @@ PatchContratos:
     patterns:
       - 'src/functions/PatchContratos/handler.js'
       - 'src/util/**'
+      - 'src/errors/**'
   events:
     - http:
-        path: ${self:custom.projectPath}/contratos/{idContrato}
+        path: ${self:custom.projectPath}/contratos
         method: patch
         integration: lambda
         authorizer:
@@ -18,3 +19,10 @@ PatchContratos:
               - CognitoUserPool
               - Arn
         response: ${file(config/schemas/responseTemplate/default200.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"        
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+      Resource: 
+        - ${cf:adv-beholder-db-${opt:env}.ContratosTableArn}

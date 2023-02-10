@@ -120,18 +120,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResponseError"
-  /contratos/{idContrato}:
     patch:
       tags:
         - Contratos
       summary: Atualiza um contrato
-      parameters:
-        - name: idContrato
-          in: path
-          description: ID do contrato
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -417,6 +409,10 @@ components:
     ContratosPatchRequest:
       type: object
       properties:
+        idContrato:
+          type: string
+        cpfCnpj:
+          type: string
         confirma:
           type: boolean
           

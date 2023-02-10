@@ -12,6 +12,8 @@ module.exports.handle = async (event, context, callback) => {
     try {
       const documentId = getUuid(body.cliente.cpfCnpj + body.processo.titulo)
       await insert(documentId, body)
+
+      // @TODO: subir arquivo S3
   
       const result = {
           idContrato: documentId,
@@ -31,17 +33,17 @@ async function insert(documentId, body) {
       Item: {
         PK: `CLIENTE#${body.cliente.cpfCnpj}`,
         SK: `CONTRATO#${documentId}`,
-        PAGAMENTO: body.pagamento
+        PAGAMENTO: body.pagamento,
+        STATUS: 'PENDENTE_CONFIRMACAO'
       }
     }
     const docClient = new AWS.DynamoDB.DocumentClient()
-  
-        console.info('Inserindo contrato: ', params)
-        const result = await docClient.put(params).promise()
-        console.info('Contrato inserido: ', result)
-        return result  
-    } catch (err) {
-        console.error('Erro ao inserir o contrato: ', err)
-        throw new InsertContractError()
-    }
+    console.info('Inserindo contrato: ', params)
+    const result = await docClient.put(params).promise()
+    console.info('Contrato inserido: ', result)
+    return result  
+  } catch (err) {
+    console.error('Erro ao inserir o contrato: ', err)
+    throw new InsertContractError()
   }
+}

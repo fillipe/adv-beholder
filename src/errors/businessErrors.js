@@ -33,11 +33,38 @@ class InsertContractError extends Error {
         super(message)
         this.name = this.constructor.name
         this.status = 400
-        this.code = 'PERSIST_CONTRACT'
+        this.code = 'PERSIST_CONTRACT_ERROR'
         this.title = 'Erro ao persistir dados de contrato'
         this.detail = 'Algum erro ocorreu ao persistir os dados de contrato'
     }
 
 }
 
-module.exports = { SignupNotAuthorizedError, LoginNotAuthorizedError, InsertContractError }
+
+class QueryContractError extends Error {
+
+    constructor(message) {
+        super(message)
+        this.name = this.constructor.name
+        this.status = 400
+        this.code = 'QUERY_CONTRACT_ERROR'
+        this.title = 'Erro ao consultar dados de contrato'
+        this.detail = 'Algum erro ocorreu durante a consulta dos dados de contrato'
+    }
+
+}
+
+class UpdateContractError extends Error {
+
+    constructor(message) {
+        super(message)
+        this.name = this.constructor.name
+        this.status = 400
+        this.code = 'UPDATE_CONTRACT_ERROR'
+        this.title = 'Erro ao atualizar dados de contrato'
+        this.detail = 'Algum erro ocorreu durante a atualização dos dados de contrato'
+    }
+
+}
+
+module.exports = { SignupNotAuthorizedError, LoginNotAuthorizedError, InsertContractError, QueryContractError, UpdateContractError }
